@@ -2,17 +2,33 @@ package globals
 
 import "os"
 
-const(
-	usersMicroserviceHostDefault = "http://localhost"
-	usersMicroservicePortDefault = "9095"
-	serverPortDefault = "9090"
+const (
+	advertisementMicroserviceHostDefault = "http://localhost"
+	advertisementMicroservicePortDefault = "9091"
+	contentMicroserviceHostDefault       = "http://localhost"
+	contentMicroservicePortDefault       = "9092"
+	locationMicroserviceHostDefault      = "http://localhost"
+	locationMicroservicePortDefault      = "9093"
+	messagingMicroserviceHostDefault     = "http://localhost"
+	messagingMicroservicePortDefault     = "9094"
+	usersMicroserviceHostDefault         = "http://localhost"
+	usersMicroservicePortDefault         = "9095"
+	serverPortDefault                    = "9090"
 )
 
 var (
-	UsersMicroserviceHost string = loadEnvValue("UsersMicroserviceHost", usersMicroserviceHostDefault)
-	UsersMicroservicePort string = loadEnvValue("UsersMicroservicePort", usersMicroservicePortDefault)
-	ServerPort string = loadEnvValue("ServerPort", serverPortDefault)
-	)
+	AdvertisementMicroserviceHost string = loadEnvValue("ADVERTISEMENT_HOST", advertisementMicroserviceHostDefault)
+	AdvertisementMicroservicePort string = loadEnvValue("ADVERTISEMENT_PORT", advertisementMicroservicePortDefault)
+	ContentMicroserviceHost       string = loadEnvValue("CONTENT_HOST", contentMicroserviceHostDefault)
+	ContentMicroservicePort       string = loadEnvValue("CONTENT_PORT", contentMicroservicePortDefault)
+	LocationMicroserviceHost      string = loadEnvValue("LOCATION_HOST", locationMicroserviceHostDefault)
+	LocationMicroservicePort      string = loadEnvValue("LOCATION_PORT", locationMicroservicePortDefault)
+	MessagingMicroserviceHost     string = loadEnvValue("MESSAGING_HOST", messagingMicroserviceHostDefault)
+	MessagingMicroservicePort     string = loadEnvValue("MESSAGING_PORT", messagingMicroservicePortDefault)
+	UsersMicroserviceHost         string = loadEnvValue("USERS_HOST", usersMicroserviceHostDefault)
+	UsersMicroservicePort         string = loadEnvValue("USERS_PORT", usersMicroservicePortDefault)
+	ServerPort                    string = loadEnvValue("ServerPort", serverPortDefault)
+)
 
 func loadEnvValue(envName string, defaultValue string) string {
 	if val, present := os.LookupEnv(envName); present {
@@ -22,10 +38,10 @@ func loadEnvValue(envName string, defaultValue string) string {
 	}
 }
 
-func GetUsersMicroserviceUrl() string{
+func GetUsersMicroserviceUrl() string {
 	if len(UsersMicroservicePort) == 0 {
 		return UsersMicroserviceHost
-	} else{
+	} else {
 		return UsersMicroserviceHost + ":" + UsersMicroservicePort
 	}
 }
