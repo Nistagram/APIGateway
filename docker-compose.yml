@@ -6,7 +6,7 @@ services:
         container_name: gateway
         restart: on-failure
         ports:
-            - ${GATEWAY_PORT}:9090
+            - ${GATEWAY_PORT}:${GATEWAY_PORT}
         environment: 
             ADVERTISEMENT_HOST: advertisement 
             ADVERTISEMENT_PORT: ${ADVERTISEMENT_PORT}
@@ -23,10 +23,9 @@ services:
         image: hesoyam/advertisement:latest
         container_name: advertisement
         restart: on-failure
-        ports:
-            - ${ADVERTISEMENT_PORT}:9091
         environment: 
-            DB_PORT: ${ADVERTISEMENT_DB_PORT}
+            PORT: ${ADVERTISEMENT_PORT}
+            DB_PORT: ${POSTGRES_PORT}
             DB_HOST: advertisementdb
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -34,14 +33,12 @@ services:
         depends_on: 
             - advertisementdb
     advertisementdb:
-        image: postgres:13.3-alpine
+        image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_DB: ${ADVERTISEMENT_DB_NAME}
-        ports: 
-            - ${ADVERTISEMENT_DB_PORT}:5432
         volumes:
             - advertisement-db:/var/lib/postgresql/data
     content:
@@ -49,10 +46,9 @@ services:
         image: hesoyam/content:latest
         container_name: content
         restart: on-failure
-        ports:
-            - ${CONTENT_PORT}:9092
         environment: 
-            DB_PORT: ${CONTENT_DB_PORT}
+            PORT: ${CONTENT_PORT}
+            DB_PORT: ${POSTGRES_PORT}
             DB_HOST: contentdb
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -60,14 +56,12 @@ services:
         depends_on: 
             - contentdb
     contentdb:
-        image: postgres:13.3-alpine
+        image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_DB: ${CONTENT_DB_NAME}
-        ports: 
-            - ${CONTENT_DB_PORT}:5432
         volumes:
             - content-db:/var/lib/postgresql/data
     location:
@@ -75,10 +69,9 @@ services:
         image: hesoyam/location:latest
         container_name: location
         restart: on-failure
-        ports:
-            - ${LOCATION_PORT}:9093
         environment: 
-            DB_PORT: ${LOCATION_DB_PORT}
+            PORT: ${LOCATION_PORT}
+            DB_PORT: ${POSTGRES_PORT}
             DB_HOST: locationdb
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -86,14 +79,12 @@ services:
         depends_on: 
             - locationdb
     locationdb:
-        image: postgres:13.3-alpine
+        image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_DB: ${LOCATION_DB_NAME}
-        ports: 
-            - ${LOCATION_DB_PORT}:5432
         volumes:
             - location-db:/var/lib/postgresql/data
     messaging:
@@ -101,10 +92,9 @@ services:
         image: hesoyam/messaging:latest
         container_name: messaging
         restart: on-failure
-        ports:
-            - ${MESSAGING_PORT}:9094
         environment: 
-            DB_PORT: ${MESSAGING_DB_PORT}
+            PORT: ${MESSAGING_PORT}
+            DB_PORT: ${POSTGRES_PORT}
             DB_HOST: messagingdb
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -112,14 +102,12 @@ services:
         depends_on: 
             - messagingdb
     messagingdb:
-        image: postgres:13.3-alpine
+        image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_DB: ${MESSAGING_DB_NAME}
-        ports: 
-            - ${MESSAGING_DB_PORT}:5432
         volumes:
             - messaging-db:/var/lib/postgresql/data
     users:
@@ -127,10 +115,9 @@ services:
         image: hesoyam/users:latest
         container_name: users
         restart: on-failure
-        ports:
-            - ${USERS_PORT}:9095
         environment: 
-            DB_PORT: ${USERS_DB_PORT}
+            PORT: ${USERS_PORT}
+            DB_PORT: ${POSTGRES_PORT}
             DB_HOST: usersdb
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -140,14 +127,12 @@ services:
         depends_on: 
             - usersdb
     usersdb:
-        image: postgres:13.3-alpine
+        image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_DB: ${USERS_DB_NAME}
-        ports: 
-            - ${USERS_DB_PORT}:5432
         volumes:
             - users-db:/var/lib/postgresql/data
     webshop:
@@ -155,10 +140,9 @@ services:
         image: hesoyam/webshop:latest
         container_name: webshop
         restart: on-failure
-        ports:
-            - ${WEBSHOP_PORT}:9096
         environment: 
-            DB_PORT: ${WEBSHOP_DB_PORT}
+            PORT: ${WEBSHOP_PORT}
+            DB_PORT: ${POSTGRES_PORT}
             DB_HOST: webshopdb
             DB_USER: ${POSTGRES_USER}
             DB_PASSWORD: ${POSTGRES_PASSWORD}
@@ -166,16 +150,35 @@ services:
         depends_on: 
             - webshopdb
     webshopdb:
-        image: postgres:13.3-alpine
+        image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_DB: ${WEBSHOP_DB_NAME}
-        ports: 
-            - ${WEBSHOP_DB_PORT}:5432
         volumes:
             - webshop-db:/var/lib/postgresql/data
+    nistagramfront:
+        build: ../nistagram-front
+        image: hesoyam/nistagramfront:latest
+        container_name: nistagramfront
+        restart: on-failure
+        environment: 
+            PORT: 80
+            # API GATEWAY URL AND PORT POSSIBLY
+        ports: 
+            - ${NISTAGRAM_FRONT_PORT}:80
+    webshopfront:
+        build: ../webshop-front
+        image: hesoyam/webshopfront:latest
+        container_name: webshopfront
+        restart: on-failure
+        environment: 
+            PORT: 80
+            # API GATEWAY URL AND PORT POSSIBLY
+            # WEBSHOP BACKEND URL AND PORT POSSIBLY
+        ports: 
+            - ${WEBSHOP_FRONT_PORT}:80
 volumes: 
     advertisement-db:
     content-db:
