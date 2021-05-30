@@ -27,7 +27,7 @@ var (
 	MessagingMicroservicePort     string = loadEnvValue("MESSAGING_PORT", messagingMicroservicePortDefault)
 	UsersMicroserviceHost         string = loadEnvValue("USERS_HOST", usersMicroserviceHostDefault)
 	UsersMicroservicePort         string = loadEnvValue("USERS_PORT", usersMicroservicePortDefault)
-	ServerPort                    string = loadEnvValue("ServerPort", serverPortDefault)
+	Port                          string = loadEnvValue("PORT", serverPortDefault)
 )
 
 func loadEnvValue(envName string, defaultValue string) string {

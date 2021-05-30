@@ -1,23 +1,24 @@
 package main
 
 import (
-	routing "github.com/APIGateway/router"
-	"github.com/gorilla/mux"
-	"github.com/APIGateway/globals"
 	"log"
 	"net/http"
+
+	"github.com/APIGateway/globals"
+	routing "github.com/APIGateway/router"
+	"github.com/gorilla/mux"
 )
 
 func main() {
 	server := &http.Server{
-		Addr:              ":" + globals.ServerPort,
-		Handler:           getPreparedRouter().Router,
+		Addr:    ":" + globals.Port,
+		Handler: getPreparedRouter().Router,
 	}
-	log.Println("Listening...")
+	log.Println("[API GATEWAY] Listening on " + globals.Port)
 	server.ListenAndServe()
 }
 
-func getPreparedRouter() routing.Router{
+func getPreparedRouter() routing.Router {
 	router := routing.Router{Router: &mux.Router{}}
 	router.Initialize()
 	return router
