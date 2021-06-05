@@ -12,6 +12,7 @@ type Router struct {
 
 func (r *Router) Initialize() {
 	r.Router.Use(middleware.JSONMiddleware)
+	r.Router.Use(middleware.CORSMiddleware)
 	registerUserHandler := httpHandler.NewRegisteredUserHandler()
 	searchHandler := httpHandler.NewSearchHandler()
 
