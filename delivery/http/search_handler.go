@@ -58,12 +58,15 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request) {
 	if username != "" {
 		params.Add("username", username)
 		requestURI = globals.GetUsersMicroserviceUrl() + path + params.Encode()
+		log.Println(requestURI)
 	} else if hashtag != "" {
 		params.Add("hashtag", hashtag)
 		requestURI = globals.GetContentMicroserviceUrl() + path + params.Encode()
+		log.Println(requestURI)
 	} else if location != "" {
 		params.Add("location", location)
 		requestURI = globals.GetContentMicroserviceUrl() + path + params.Encode()
+		log.Println(requestURI)
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
 		return

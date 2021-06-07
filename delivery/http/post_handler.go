@@ -8,25 +8,27 @@ import (
 	"net/http"
 )
 
-type ContentHandler struct {
+type PostHandler struct {
 	ContentURL string
 }
 
-func NewContentHandler() *ContentHandler {
-	return &ContentHandler{ContentURL: globals.GetContentMicroserviceUrl()}
+func NewPostHandler() *PostHandler {
+	return &PostHandler{ContentURL: globals.GetContentMicroserviceUrl()}
 }
 
-func (handler *ContentHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+func (handler *PostHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	requestURI := handler.ContentURL + "/api/post"
+	log.Println("Request URI: " + requestURI)
 	resp, err := http.Get(requestURI)
 	if err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	} else {
 		WriteResponse(&w, resp)
 	}
 }
 
-func (handler *ContentHandler) LikePost(w http.ResponseWriter, r *http.Request) {
+func (handler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
 	requestURI := handler.ContentURL + "/api/post/like"
 	body, bodyErr := ioutil.ReadAll(r.Body);
 	if bodyErr != nil {
@@ -43,7 +45,7 @@ func (handler *ContentHandler) LikePost(w http.ResponseWriter, r *http.Request) 
 	writeResponse(&w, resp);
 }
 
-func (handler *ContentHandler) CommentPost(w http.ResponseWriter, r *http.Request) {
+func (handler *PostHandler) CommentPost(w http.ResponseWriter, r *http.Request) {
 	requestURI := handler.ContentURL + "/api/post/comment"
 	body, bodyErr := ioutil.ReadAll(r.Body);
 	if bodyErr != nil {
