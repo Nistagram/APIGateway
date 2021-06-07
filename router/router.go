@@ -17,12 +17,18 @@ func (r *Router) Initialize() {
 	registerUserHandler := httpHandler.NewRegisteredUserHandler()
 	searchHandler := httpHandler.NewSearchHandler()
 	authHandler := httpHandler.NewAuthHandler()
+	postHandler := httpHandler.NewPostHandler()
 
 	r.Router.HandleFunc("/api/users", registerUserHandler.GetAll).Methods("GET")
 
 	r.Router.HandleFunc("/api/search", searchHandler.Search).Methods("GET")
 
 	usersSubRouter := r.Router.PathPrefix("/api/users").Subrouter();
-	usersSubRouter.PathPrefix("/login").Handler(http.HandlerFunc(authHandler.Login))
+	usersSubRouter.PathPrefix("/login").Handler(http.HandlerFunc(authHandler.Login)).Methods("POST", "OPTIONS")
 	usersSubRouter.PathPrefix("/register").Handler(http.HandlerFunc(authHandler.Register))
+
+	contentSubRouter := r.Router.PathPrefix("/api/content").Subrouter();
+	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET")
+	contentSubRouter.PathPrefix("/post/like").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("POST", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/comment").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("POST", "OPTIONS")
 }

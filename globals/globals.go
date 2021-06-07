@@ -40,16 +40,16 @@ func loadEnvValue(envName string, defaultValue string) string {
 
 func GetUsersMicroserviceUrl() string {
 	if len(UsersMicroservicePort) == 0 || UsersMicroservicePort == "80" {
-		return UsersMicroserviceHost
+		return "http://" + UsersMicroserviceHost
 	} else {
-		return UsersMicroserviceHost + ":" + UsersMicroservicePort
+		return "http://" + UsersMicroserviceHost + ":" + UsersMicroservicePort
 	}
 }
 
 func GetContentMicroserviceUrl() string {
 	if len(ContentMicroservicePort) == 0 || ContentMicroservicePort == "80" {
-		return ContentMicroserviceHost
+		return "http://" + ContentMicroserviceHost
 	} else {
-		return ContentMicroserviceHost + ":" + ContentMicroservicePort
+		return "http://" + ContentMicroserviceHost + ":" + ContentMicroservicePort
 	}
 }
