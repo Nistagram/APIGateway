@@ -21,18 +21,18 @@ func (r *Router) Initialize() {
 	postHandler := httpHandler.NewPostHandler()
 	followsHandler := httpHandler.NewFollowsHandler()
 
-	r.Router.HandleFunc("/api/users", registerUserHandler.GetAll).Methods("GET")
+	r.Router.HandleFunc("/api/users", registerUserHandler.GetAll).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/user", registerUserHandler.Get).Methods("GET", "OPTIONS")
 
-	r.Router.HandleFunc("/api/search", searchHandler.Search).Methods("GET")
+	r.Router.HandleFunc("/api/search", searchHandler.Search).Methods("GET", "OPTIONS")
 
 	usersSubRouter := r.Router.PathPrefix("/api/users").Subrouter()
 	usersSubRouter.PathPrefix("/login").Handler(http.HandlerFunc(authHandler.Login)).Methods("POST", "OPTIONS")
-	usersSubRouter.PathPrefix("/register").Handler(http.HandlerFunc(authHandler.Register))
+	usersSubRouter.PathPrefix("/register").Handler(http.HandlerFunc(authHandler.Register)).Methods("POST", "OPTIONS")
 	usersSubRouter.PathPrefix("/edit").Handler(http.HandlerFunc(registerUserHandler.Edit)).Methods("POST", "OPTIONS")
 
 	contentSubRouter := r.Router.PathPrefix("/api/content").Subrouter()
-	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET")
+	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/upload").Handler(http.HandlerFunc(postHandler.UploadPost)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/media/upload").Handler(http.HandlerFunc(postHandler.UploadMedia)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/story/upload").Handler(http.HandlerFunc(postHandler.UploadStory)).Methods("POST", "OPTIONS")
