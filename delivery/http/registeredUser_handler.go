@@ -60,6 +60,21 @@ func (handler *RegisteredUserHandler) GetAll(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+func (handler *RegisteredUserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request){
+	bearToken := r.Header.Get("Authorization")
+	requestURI := handler.Url + "/api/info"
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", bearToken)
+	resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		writeResponse(&w, resp)
+	}
+}
+
 func writeResponse(w *http.ResponseWriter, resp *http.Response) {
 	defer resp.Body.Close()
 	if responseBody, err := ioutil.ReadAll(resp.Body); err != nil {
