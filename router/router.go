@@ -28,7 +28,7 @@ func (r *Router) Initialize() {
 	usersSubRouter.PathPrefix("/register").Handler(http.HandlerFunc(authHandler.Register))
 
 	contentSubRouter := r.Router.PathPrefix("/api/content").Subrouter();
-	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET")
-	contentSubRouter.PathPrefix("/post/like").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("POST", "OPTIONS")
-	contentSubRouter.PathPrefix("/post/comment").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("POST", "OPTIONS")
+	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/like").Handler(http.HandlerFunc(postHandler.LikePost)).Methods("POST", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/comment").Handler(http.HandlerFunc(postHandler.CommentPost)).Methods("POST", "OPTIONS")
 }
