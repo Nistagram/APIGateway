@@ -2,9 +2,11 @@ package http
 
 import (
 	"bytes"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/APIGateway/globals"
 )
@@ -68,6 +70,7 @@ func (handler *RegisteredUserHandler) EditConfig(w http.ResponseWriter, r *http.
 }
 
 func (handler *RegisteredUserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+	log.Println("Helo from get all")
 	resp, err := http.Get(handler.Url + "/api/users")
 	if err != nil {
 		log.Println(err)
@@ -91,6 +94,26 @@ func (handler *RegisteredUserHandler) GetUserInfo(w http.ResponseWriter, r *http
 		writeResponse(&w, resp)
 	}
 }
+
+func (handler *RegisteredUserHandler) GetUserInfoById( w http.ResponseWriter, r *http.Request){
+	log.Println("Helo from get info in APIGateway")
+	params := mux.Vars(r);
+	id, _ := strconv.ParseUint(params["id"], 10, 64)
+	requestURI := handler.Url + "/api/info/" + strconv.FormatUint(id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	log.Println("Helo After Method in APIGATEWAY")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		writeResponse(&w, resp)
+	}
+}
+
 
 func writeResponse(w *http.ResponseWriter, resp *http.Response) {
 	defer resp.Body.Close()
