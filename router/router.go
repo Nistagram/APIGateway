@@ -30,7 +30,7 @@ func (r *Router) Initialize() {
 	usersSubRouter.PathPrefix("/login").Handler(http.HandlerFunc(authHandler.Login)).Methods("POST", "OPTIONS")
 	usersSubRouter.PathPrefix("/register").Handler(http.HandlerFunc(authHandler.Register)).Methods("POST", "OPTIONS")
 	usersSubRouter.PathPrefix("/edit").Handler(http.HandlerFunc(registerUserHandler.Edit)).Methods("POST", "OPTIONS")
-	usersSubRouter.PathPrefix("/info").Handler(http.HandlerFunc(registerUserHandler.GetUserInfo))
+	usersSubRouter.PathPrefix("/info").Handler(http.HandlerFunc(registerUserHandler.GetUserInfo)).Methods("GET", "OPTIONS")
 
 
 	contentSubRouter := r.Router.PathPrefix("/api/content").Subrouter()
