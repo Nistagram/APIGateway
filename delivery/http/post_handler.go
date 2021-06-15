@@ -130,8 +130,15 @@ func (handler *PostHandler) LikePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handler *PostHandler) CommentPost(w http.ResponseWriter, r *http.Request) {
-	requestURI := handler.ContentURL + "/api/post/comment"
-	body, bodyErr := ioutil.ReadAll(r.Body)
+	bearToken := r.Header.Get("Authorization")
+	userId, err := handler.getUserIdFromSession(bearToken)
+
+	params := url.Values{}
+	params.Add("userId", strconv.Itoa(int(userId)))
+
+	requestURI := handler.ContentURL + "/api/post/comment?" + params.Encode()
+	body, bodyErr := ioutil.ReadAll(r.Body);
+
 	if bodyErr != nil {
 		log.Println(bodyErr)
 		w.WriteHeader(http.StatusInternalServerError)
