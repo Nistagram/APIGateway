@@ -50,6 +50,23 @@ func (handler *RegisteredUserHandler) Edit(w http.ResponseWriter, r *http.Reques
 	writeResponse(&w, resp)
 }
 
+func (handler *RegisteredUserHandler) EditConfig(w http.ResponseWriter, r *http.Request) {
+	body, bodyErr := ioutil.ReadAll(r.Body)
+	if bodyErr != nil {
+		log.Println(bodyErr)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := http.Post(handler.Url+"/api/users/config/edit", "application/json", bytes.NewReader(body))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	writeResponse(&w, resp)
+}
+
 func (handler *RegisteredUserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(handler.Url + "/api/users")
 	if err != nil {
@@ -60,7 +77,7 @@ func (handler *RegisteredUserHandler) GetAll(w http.ResponseWriter, r *http.Requ
 	}
 }
 
-func (handler *RegisteredUserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request){
+func (handler *RegisteredUserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 	bearToken := r.Header.Get("Authorization")
 	requestURI := handler.Url + "/api/info"
 	client := &http.Client{}
