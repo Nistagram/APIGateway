@@ -38,13 +38,29 @@ func loadEnvValue(envName string, defaultValue string) string {
 	}
 }
 
+//func GetUsersMicroserviceUrl() string {
+//	if len(UsersMicroservicePort) == 0 || UsersMicroservicePort == "80" {
+//		return "http://" + UsersMicroserviceHost
+//		// return UsersMicroserviceHost
+//	} else {
+//		return "http://" + UsersMicroserviceHost + ":" + UsersMicroservicePort
+//		// return UsersMicroserviceHost + ":" + UsersMicroservicePort
+//	}
+//}
+
 func GetUsersMicroserviceUrl() string {
 	if len(UsersMicroservicePort) == 0 || UsersMicroservicePort == "80" {
-		return "http://" + UsersMicroserviceHost
-		// return UsersMicroserviceHost
+		if UsersMicroserviceHost == "http://localhost"{
+			return UsersMicroserviceHost
+		}else {
+			return "http://" + UsersMicroserviceHost
+		}
 	} else {
-		return "http://" + UsersMicroserviceHost + ":" + UsersMicroservicePort
-		// return UsersMicroserviceHost + ":" + UsersMicroservicePort
+		if UsersMicroserviceHost == "http://localhost"{
+			return UsersMicroserviceHost + ":" + UsersMicroservicePort
+		}else{
+			return "http://" + UsersMicroserviceHost + ":" + UsersMicroservicePort
+		}
 	}
 }
 
