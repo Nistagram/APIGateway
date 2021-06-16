@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -32,6 +33,60 @@ func (handler *PostHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	} else {
 		WriteResponse(&w, resp)
+	}
+}
+
+func (handler *PostHandler) GetAllLiked(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r);
+	id, _ := strconv.ParseUint(params["id"], 10, 64)
+
+	requestURI := handler.ContentURL + "/api/post/liked/" + strconv.FormatUint(id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		WriteResponse(&w, resp)
+	}
+}
+
+func (handler *PostHandler) GetAllTaggedIn(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r);
+	id, _ := strconv.ParseUint(params["id"], 10, 64)
+
+	requestURI := handler.ContentURL + "/api/post/taggedIn/" + strconv.FormatUint(id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		WriteResponse(&w, resp)
+	}
+}
+
+func (handler *PostHandler) GetByUserId(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r);
+	user_id, _ := strconv.ParseUint(params["user_id"], 10, 64)
+
+	requestURI := handler.ContentURL + "/api/post/" + strconv.FormatUint(user_id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		writeResponse(&w, resp)
 	}
 }
 
