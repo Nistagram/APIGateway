@@ -96,7 +96,6 @@ func (handler *RegisteredUserHandler) GetUserInfo(w http.ResponseWriter, r *http
 }
 
 func (handler *RegisteredUserHandler) GetUserInfoById( w http.ResponseWriter, r *http.Request){
-	log.Println("Helo from get info in APIGateway")
 	params := mux.Vars(r);
 	id, _ := strconv.ParseUint(params["id"], 10, 64)
 	requestURI := handler.Url + "/api/info/" + strconv.FormatUint(id, 10)
@@ -105,7 +104,6 @@ func (handler *RegisteredUserHandler) GetUserInfoById( w http.ResponseWriter, r 
 	req, _ := http.NewRequest("GET", requestURI, nil)
 	req.Header.Set("Authorization", r.Header.Get("Authorization"))
 	resp, err := client.Do(req)
-	log.Println("Helo After Method in APIGATEWAY")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
