@@ -207,3 +207,27 @@ func (handler *PostHandler) CommentPost(w http.ResponseWriter, r *http.Request) 
 	}
 	writeResponse(&w, resp)
 }
+
+func (handler *PostHandler) ReportPost(w http.ResponseWriter, r *http.Request) {
+	bearToken := r.Header.Get("Authorization")
+	userId, err := handler.getUserIdFromSession(bearToken)
+
+	params := url.Values{}
+	params.Add("userId", strconv.Itoa(int(userId)))
+
+	requestURI := handler.ContentURL + "/api/post/report?" + params.Encode()
+	body, bodyErr := ioutil.ReadAll(r.Body);
+
+	if bodyErr != nil {
+		log.Println(bodyErr)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	resp, err := http.Post(requestURI, "application/json", bytes.NewReader(body))
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	writeResponse(&w, resp)
+}
