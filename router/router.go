@@ -44,6 +44,7 @@ func (r *Router) Initialize() {
 	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/like").Handler(http.HandlerFunc(postHandler.LikePost)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/comment").Handler(http.HandlerFunc(postHandler.CommentPost)).Methods("POST", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/report").Handler(http.HandlerFunc(postHandler.ReportPost)).Methods("POST", "OPTIONS")
 
 	followsSubRouter := r.Router.PathPrefix("/api/follows").Subrouter()
 	followsSubRouter.Path("/sendFollowRequest/{receiver_id:[0-9]+}").Handler(http.HandlerFunc(followsHandler.CreateFollowRequest)).Methods("POST", "OPTIONS")
