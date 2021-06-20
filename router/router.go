@@ -20,6 +20,10 @@ func (r *Router) Initialize() {
 	authHandler := httpHandler.NewAuthHandler()
 	postHandler := httpHandler.NewPostHandler()
 	followsHandler := httpHandler.NewFollowsHandler()
+	verificationCategoryHandler := httpHandler.NewVerificationCategoryHandler()
+	businessCategoryHandler := httpHandler.NewBusinessCategoryHandlerHandler()
+	verificationHandler := httpHandler.NewVerificationHandler()
+	mediaHandler := httpHandler.NewMediaHandler()
 
 	r.Router.HandleFunc("/api/users", registerUserHandler.GetAll).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/user", registerUserHandler.Get).Methods("GET", "OPTIONS")
@@ -45,9 +49,22 @@ func (r *Router) Initialize() {
 	contentSubRouter.PathPrefix("/post/like").Handler(http.HandlerFunc(postHandler.LikePost)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/comment").Handler(http.HandlerFunc(postHandler.CommentPost)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/report").Handler(http.HandlerFunc(postHandler.ReportPost)).Methods("POST", "OPTIONS")
-
+	//contentSubRouter.HandleFunc("/api/media/{id:[0-9]+}", mediaHandler.Get).Methods("GET", "OPTIONS")
+	contentSubRouter.PathPrefix("/media/{id:[0-9]+}").Handler(http.HandlerFunc(mediaHandler.Get)).Methods("GET", "OPTIONS")
 	followsSubRouter := r.Router.PathPrefix("/api/follows").Subrouter()
 	followsSubRouter.Path("/sendFollowRequest/{receiver_id:[0-9]+}").Handler(http.HandlerFunc(followsHandler.CreateFollowRequest)).Methods("POST", "OPTIONS")
 	followsSubRouter.Path("/acceptFollowRequest/{sender_id:[0-9]+}").Handler(http.HandlerFunc(followsHandler.AcceptFollowRequest)).Methods("POST", "OPTIONS")
 	followsSubRouter.Path("/rejectFollowRequest/{sender_id:[0-9]+}").Handler(http.HandlerFunc(followsHandler.RejectFollowRequest)).Methods("POST", "OPTIONS")
+
+	verificationSubRouter := r.Router.PathPrefix("/api/verification").Subrouter()
+	verificationSubRouter.Path("/category").Handler(http.HandlerFunc(verificationCategoryHandler.GetAll))
+	verificationSubRouter.Path("/verify").Handler(http.HandlerFunc(verificationHandler.CreateVerificationRequest))
+	verificationSubRouter.Path("/status/{id}").Handler(http.HandlerFunc(verificationHandler.GetVerificationStatus)).Methods("GET", "OPTIONS")
+	verificationSubRouter.Path("/accept/{id}").Handler(http.HandlerFunc(verificationHandler.Accept)).Methods("POST", "OPTIONS")
+	verificationSubRouter.Path("/reject/{id}").Handler(http.HandlerFunc(verificationHandler.Reject)).Methods("POST", "OPTIONS")
+	verificationSubRouter.Path("/unresolved").Handler(http.HandlerFunc(verificationHandler.GetUnresolved)).Methods("GET", "OPTIONS")
+	businessCategorySubRouter := r.Router.PathPrefix("/api/business-category").Subrouter()
+	businessCategorySubRouter.Path("").Handler(http.HandlerFunc(businessCategoryHandler.GetAll))
+
+
 }

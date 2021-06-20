@@ -66,7 +66,7 @@ func GetUsersMicroserviceUrl() string {
 
 func GetContentMicroserviceUrl() string {
 	if len(ContentMicroservicePort) == 0 || ContentMicroservicePort == "80" {
-		if ContentMicroserviceHost == "http://localhost"{
+	if ContentMicroserviceHost == "http://localhost"{
 			return ContentMicroserviceHost
 		}else{
 			return "http://" + ContentMicroserviceHost
