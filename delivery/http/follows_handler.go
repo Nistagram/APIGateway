@@ -60,6 +60,22 @@ func (handler *FollowsHandler) RejectFollowRequest(w http.ResponseWriter, r *htt
 	writeResponse(&w, resp);
 }
 
+func (handler *FollowsHandler) IsFollowing(w http.ResponseWriter, r *http.Request){
+	params := mux.Vars(r);
+	id, _ := strconv.ParseUint(params["id"], 10, 64)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", handler.UsersURL + "/api/follows/isFollowing/" + strconv.FormatUint(id, 10), nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return;
+	}
+	writeResponse(&w, resp);
+}
+
 
 
 func NewFollowsHandler() *FollowsHandler {
