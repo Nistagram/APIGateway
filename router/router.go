@@ -29,6 +29,8 @@ func (r *Router) Initialize() {
 	r.Router.HandleFunc("/api/user", registerUserHandler.Get).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/users/config/edit", registerUserHandler.EditConfig).Methods("POST", "OPTIONS")
 	r.Router.HandleFunc("/api/search", searchHandler.Search).Methods("GET", "OPTIONS")
+	r.Router.HandleFunc("/api/block/user/{user_id:[0-9]+}", registerUserHandler.Block).Methods("GET", "OPTIONS")
+	r.Router.HandleFunc("/api/mute/user/{user_id:[0-9]+}", registerUserHandler.Mute).Methods("GET", "OPTIONS")
 
 	usersSubRouter := r.Router.PathPrefix("/api/users").Subrouter()
 	usersSubRouter.PathPrefix("/login").Handler(http.HandlerFunc(authHandler.Login)).Methods("POST", "OPTIONS")

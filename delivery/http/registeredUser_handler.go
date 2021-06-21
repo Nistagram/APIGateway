@@ -2,11 +2,12 @@ package http
 
 import (
 	"bytes"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 
 	"github.com/APIGateway/globals"
 )
@@ -95,8 +96,8 @@ func (handler *RegisteredUserHandler) GetUserInfo(w http.ResponseWriter, r *http
 	}
 }
 
-func (handler *RegisteredUserHandler) GetUserInfoById( w http.ResponseWriter, r *http.Request){
-	params := mux.Vars(r);
+func (handler *RegisteredUserHandler) GetUserInfoById(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 	id, _ := strconv.ParseUint(params["id"], 10, 64)
 	requestURI := handler.Url + "/api/info/" + strconv.FormatUint(id, 10)
 
@@ -112,6 +113,39 @@ func (handler *RegisteredUserHandler) GetUserInfoById( w http.ResponseWriter, r 
 	}
 }
 
+func (handler *RegisteredUserHandler) Block(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, _ := strconv.ParseUint(params["user_id"], 10, 64)
+	requestURI := handler.Url + "/api/block/user/" + strconv.FormatUint(id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		writeResponse(&w, resp)
+	}
+}
+
+func (handler *RegisteredUserHandler) Mute(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, _ := strconv.ParseUint(params["user_id"], 10, 64)
+	requestURI := handler.Url + "/api/mute/user/" + strconv.FormatUint(id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		writeResponse(&w, resp)
+	}
+}
 
 func writeResponse(w *http.ResponseWriter, resp *http.Response) {
 	defer resp.Body.Close()
