@@ -24,6 +24,7 @@ func (r *Router) Initialize() {
 	businessCategoryHandler := httpHandler.NewBusinessCategoryHandlerHandler()
 	verificationHandler := httpHandler.NewVerificationHandler()
 	mediaHandler := httpHandler.NewMediaHandler()
+	feedHandler := httpHandler.NewFeedHandler()
 
 	r.Router.HandleFunc("/api/users", registerUserHandler.GetAll).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/user", registerUserHandler.Get).Methods("GET", "OPTIONS")
@@ -33,6 +34,7 @@ func (r *Router) Initialize() {
 	r.Router.HandleFunc("/api/mute/user/{user_id:[0-9]+}", registerUserHandler.Mute).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/unblock/user/{user_id:[0-9]+}", registerUserHandler.Unblock).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/unmute/user/{user_id:[0-9]+}", registerUserHandler.Unmute).Methods("GET", "OPTIONS")
+	r.Router.HandleFunc("/api/feed", feedHandler.GetFeedPosts).Methods("GET", "OPTIONS")
 
 	usersSubRouter := r.Router.PathPrefix("/api/users").Subrouter()
 	usersSubRouter.PathPrefix("/login").Handler(http.HandlerFunc(authHandler.Login)).Methods("POST", "OPTIONS")
