@@ -181,6 +181,22 @@ func (handler *RegisteredUserHandler) Unmute(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+func (handler *RegisteredUserHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	requestURI := handler.Url + "/api/user/" + params["id"]
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("DELETE", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		writeResponse(&w, resp)
+	}
+}
+
 func writeResponse(w *http.ResponseWriter, resp *http.Response) {
 	defer resp.Body.Close()
 	if responseBody, err := ioutil.ReadAll(resp.Body); err != nil {

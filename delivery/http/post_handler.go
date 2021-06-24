@@ -2,10 +2,11 @@ package http
 
 import (
 	"bytes"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 
 	"github.com/APIGateway/globals"
 
@@ -37,7 +38,7 @@ func (handler *PostHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handler *PostHandler) GetAllLiked(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r);
+	params := mux.Vars(r)
 	id, _ := strconv.ParseUint(params["id"], 10, 64)
 
 	requestURI := handler.ContentURL + "/api/post/liked/" + strconv.FormatUint(id, 10)
@@ -55,7 +56,7 @@ func (handler *PostHandler) GetAllLiked(w http.ResponseWriter, r *http.Request) 
 }
 
 func (handler *PostHandler) GetAllTaggedIn(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r);
+	params := mux.Vars(r)
 	id, _ := strconv.ParseUint(params["id"], 10, 64)
 
 	requestURI := handler.ContentURL + "/api/post/taggedIn/" + strconv.FormatUint(id, 10)
@@ -73,7 +74,7 @@ func (handler *PostHandler) GetAllTaggedIn(w http.ResponseWriter, r *http.Reques
 }
 
 func (handler *PostHandler) GetById(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r);
+	params := mux.Vars(r)
 	id, _ := strconv.ParseUint(params["id"], 10, 64)
 
 	requestURI := handler.ContentURL + "/api/post/" + strconv.FormatUint(id, 10)
@@ -91,7 +92,7 @@ func (handler *PostHandler) GetById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (handler *PostHandler) GetByUserId(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r);
+	params := mux.Vars(r)
 	user_id, _ := strconv.ParseUint(params["user_id"], 10, 64)
 
 	requestURI := handler.ContentURL + "/api/post/user/" + strconv.FormatUint(user_id, 10)
@@ -232,7 +233,7 @@ func (handler *PostHandler) CommentPost(w http.ResponseWriter, r *http.Request) 
 	params.Add("userId", strconv.Itoa(int(userId)))
 
 	requestURI := handler.ContentURL + "/api/post/comment?" + params.Encode()
-	body, bodyErr := ioutil.ReadAll(r.Body);
+	body, bodyErr := ioutil.ReadAll(r.Body)
 
 	if bodyErr != nil {
 		log.Println(bodyErr)
@@ -256,7 +257,7 @@ func (handler *PostHandler) ReportPost(w http.ResponseWriter, r *http.Request) {
 	params.Add("userId", strconv.Itoa(int(userId)))
 
 	requestURI := handler.ContentURL + "/api/post/report?" + params.Encode()
-	body, bodyErr := ioutil.ReadAll(r.Body);
+	body, bodyErr := ioutil.ReadAll(r.Body)
 
 	if bodyErr != nil {
 		log.Println(bodyErr)
@@ -270,4 +271,19 @@ func (handler *PostHandler) ReportPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeResponse(&w, resp)
+}
+
+func (handler *PostHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	client := &http.Client{}
+	req, _ := http.NewRequest("DELETE", handler.ContentURL+"/api/post/"+params["id"], nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		WriteResponse(&w, resp)
+	}
 }
