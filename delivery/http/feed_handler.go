@@ -21,12 +21,14 @@ func (handler *FeedHandler) GetFeedPosts(w http.ResponseWriter, r *http.Request)
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", handler.UsersURL+"/api/follows/followings", nil)
 	req.Header.Set("Authorization", r.Header.Get("Authorization"))
-	resp, err := client.Do(req)
-	if err != nil {
+	followings, err_followings := client.Do(req)
+
+	if err_followings != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	} else {
-		body, _ := ioutil.ReadAll(resp.Body)
+
+		body, _ := ioutil.ReadAll(followings.Body)
 		req, _ := http.NewRequest("GET", handler.ContentURL+"/api/feed?page="+r.URL.Query().Get("page")+"&page_size="+r.URL.Query().Get("page_size"), bytes.NewReader(body))
 		resp, err := client.Do(req)
 
