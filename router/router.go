@@ -27,6 +27,7 @@ func (r *Router) Initialize() {
 	feedHandler := httpHandler.NewFeedHandler()
 	reportHandler := httpHandler.NewReportHandler()
 	storyHandler := httpHandler.NewStoryHandler()
+	agentHandler := httpHandler.NewAgentHandler()
 
 	r.Router.HandleFunc("/api/users", registerUserHandler.GetAll).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/user", registerUserHandler.Get).Methods("GET", "OPTIONS")
@@ -81,6 +82,10 @@ func (r *Router) Initialize() {
 	verificationSubRouter.Path("/unresolved").Handler(http.HandlerFunc(verificationHandler.GetUnresolved)).Methods("GET", "OPTIONS")
 	businessCategorySubRouter := r.Router.PathPrefix("/api/business-category").Subrouter()
 	businessCategorySubRouter.Path("").Handler(http.HandlerFunc(businessCategoryHandler.GetAll))
+
+	agentSubrouter := r.Router.PathPrefix("/api/agent").Subrouter()
+	agentSubrouter.Path("/registration-request").Handler(http.HandlerFunc(agentHandler.CreateRegistrationRequest)).Methods("POST", "OPTIONS")
+	agentSubrouter.Path("/registration-request").Handler(http.HandlerFunc(agentHandler.GetAllRegistrationRequests)).Methods("GET", "OPTIONS")
 
 	r.Router.HandleFunc("/api/report-types", reportHandler.GetAllTypes).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/report", reportHandler.GetAll).Methods("GET", "OPTIONS")
