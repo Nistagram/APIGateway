@@ -86,6 +86,7 @@ func (r *Router) Initialize() {
 	agentSubrouter := r.Router.PathPrefix("/api/agent").Subrouter()
 	agentSubrouter.Path("/registration-request").Handler(http.HandlerFunc(agentHandler.CreateRegistrationRequest)).Methods("POST", "OPTIONS")
 	agentSubrouter.Path("/registration-request").Handler(http.HandlerFunc(agentHandler.GetAllRegistrationRequests)).Methods("GET", "OPTIONS")
+	agentSubrouter.Path("/registration-request/{id:[0-9]+}/reject").Handler(http.HandlerFunc(agentHandler.RejectRegistrationRequest)).Methods("POST", "OPTIONS")
 
 	r.Router.HandleFunc("/api/report-types", reportHandler.GetAllTypes).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/report", reportHandler.GetAll).Methods("GET", "OPTIONS")

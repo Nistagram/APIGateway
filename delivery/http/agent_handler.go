@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/APIGateway/globals"
+	"github.com/gorilla/mux"
 )
 
 type AgentHandler struct {
@@ -45,6 +46,22 @@ func (handler *AgentHandler) CreateRegistrationRequest(w http.ResponseWriter, r 
 	client := &http.Client{}
 	req, _ := http.NewRequest("POST", requestURI, bytes.NewReader(body))
 	//req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		WriteResponse(&w, resp)
+	}
+}
+
+func (handler *AgentHandler) RejectRegistrationRequest(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	requestURI := handler.UsersURL + "/api/agent/registration-request/" + params["id"] + "/reject"
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println(err)
