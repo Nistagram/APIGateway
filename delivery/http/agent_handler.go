@@ -70,3 +70,19 @@ func (handler *AgentHandler) RejectRegistrationRequest(w http.ResponseWriter, r 
 		WriteResponse(&w, resp)
 	}
 }
+
+func (handler *AgentHandler) AcceptRegistrationRequest(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	requestURI := handler.UsersURL + "/api/agent/registration-request/" + params["id"] + "/accept"
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		WriteResponse(&w, resp)
+	}
+}
