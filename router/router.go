@@ -56,6 +56,7 @@ func (r *Router) Initialize() {
 	contentSubRouter.PathPrefix("/story/{id:[0-9]+}").Handler(http.HandlerFunc(storyHandler.Delete)).Methods("DELETE", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/user/{user_id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetByUserId)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/liked/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllLiked)).Methods("GET", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/disliked/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllDisliked)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/taggedIn/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllTaggedIn)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetById)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.Delete)).Methods("DELETE", "OPTIONS")
