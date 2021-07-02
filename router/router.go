@@ -50,6 +50,7 @@ func (r *Router) Initialize() {
 	contentSubRouter := r.Router.PathPrefix("/api/content").Subrouter()
 
 	contentSubRouter.PathPrefix("/post/is/isLiked").Handler(http.HandlerFunc(postHandler.IsLikedPost)).Methods("POST", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/save").Handler(http.HandlerFunc(postHandler.SavePost)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/upload").Handler(http.HandlerFunc(postHandler.UploadPost)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/media/upload").Handler(http.HandlerFunc(postHandler.UploadMedia)).Methods("POST", "OPTIONS")
 	contentSubRouter.PathPrefix("/story/upload").Handler(http.HandlerFunc(postHandler.UploadStory)).Methods("POST", "OPTIONS")
@@ -57,6 +58,7 @@ func (r *Router) Initialize() {
 	contentSubRouter.PathPrefix("/post/user/{user_id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetByUserId)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/liked/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllLiked)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/disliked/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllDisliked)).Methods("GET", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/saved/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllSaved)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/taggedIn/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllTaggedIn)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetById)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.Delete)).Methods("DELETE", "OPTIONS")
