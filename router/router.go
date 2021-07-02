@@ -38,6 +38,7 @@ func (r *Router) Initialize() {
 	r.Router.HandleFunc("/api/mute/user/{user_id:[0-9]+}", registerUserHandler.Mute).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/unblock/user/{user_id:[0-9]+}", registerUserHandler.Unblock).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/unmute/user/{user_id:[0-9]+}", registerUserHandler.Unmute).Methods("GET", "OPTIONS")
+	r.Router.HandleFunc("/api/am/i/blocked/{user_id:[0-9]+}", registerUserHandler.CheckAmIBlocked).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/feed", feedHandler.GetFeedPosts).Methods("GET", "OPTIONS")
 
 	usersSubRouter := r.Router.PathPrefix("/api/users").Subrouter()
