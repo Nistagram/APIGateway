@@ -124,6 +124,19 @@ func(handler *FollowsHandler) Unfollow(w http.ResponseWriter, r *http.Request){
 	writeResponse(&w, resp);
 }
 
+func (handler *FollowsHandler) GetPendingFollowRequests(w http.ResponseWriter, r *http.Request){
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", handler.UsersURL + "/api/follows/pendingFollowRequests", nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return;
+	}
+	writeResponse(&w, resp);
+}
+
 
 
 func NewFollowsHandler() *FollowsHandler {

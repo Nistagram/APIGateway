@@ -77,6 +77,7 @@ func (r *Router) Initialize() {
 	followsSubRouter.HandleFunc("/isFollowing/{id:[0-9]+}", followsHandler.IsFollowing).Methods("GET", "OPTIONS")
 	followsSubRouter.HandleFunc("/isFollowRequestPending/{id:[0-9]+}", followsHandler.IsFollowRequestPending).Methods("GET", "OPTIONS")
 	followsSubRouter.HandleFunc("/withdrawFollowRequest/{id:[0-9]+}", followsHandler.WithdrawFollowRequest).Methods("POST", "OPTIONS")
+	followsSubRouter.HandleFunc("/pendingFollowRequests", followsHandler.GetPendingFollowRequests).Methods("GET", "OPTIONS")
 	verificationSubRouter := r.Router.PathPrefix("/api/verification").Subrouter()
 	verificationSubRouter.Path("/category").Handler(http.HandlerFunc(verificationCategoryHandler.GetAll))
 	verificationSubRouter.Path("/verify").Handler(http.HandlerFunc(verificationHandler.CreateVerificationRequest))
