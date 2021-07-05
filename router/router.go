@@ -61,6 +61,7 @@ func (r *Router) Initialize() {
 	contentSubRouter.PathPrefix("/post/disliked/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllDisliked)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/saved/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllSaved)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/taggedIn/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllTaggedIn)).Methods("GET", "OPTIONS")
+	contentSubRouter.PathPrefix("/post/reported/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetAllReported)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.GetById)).Methods("GET", "OPTIONS")
 	contentSubRouter.PathPrefix("/post/{id:[0-9]+}").Handler(http.HandlerFunc(postHandler.Delete)).Methods("DELETE", "OPTIONS")
 	contentSubRouter.PathPrefix("/post").Handler(http.HandlerFunc(postHandler.GetAll)).Methods("GET", "OPTIONS")

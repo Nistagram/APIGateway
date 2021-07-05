@@ -109,6 +109,24 @@ func (handler *PostHandler) GetAllTaggedIn(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+func (handler *PostHandler) GetAllReported(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, _ := strconv.ParseUint(params["id"], 10, 64)
+
+	requestURI := handler.ContentURL + "/api/post/reported/" + strconv.FormatUint(id, 10)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", requestURI, nil)
+	req.Header.Set("Authorization", r.Header.Get("Authorization"))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		WriteResponse(&w, resp)
+	}
+}
+
 func (handler *PostHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, _ := strconv.ParseUint(params["id"], 10, 64)
