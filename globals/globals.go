@@ -14,6 +14,8 @@ const (
 	usersMicroserviceHostDefault         = "http://localhost"
 	usersMicroservicePortDefault         = "9095"
 	serverPortDefault                    = "9090"
+	jwtTokenSecretDefault                = "12345"
+	jwtTokenLifeLength                   = "24"
 )
 
 var (
@@ -28,6 +30,8 @@ var (
 	UsersMicroserviceHost         string = loadEnvValue("USERS_HOST", usersMicroserviceHostDefault)
 	UsersMicroservicePort         string = loadEnvValue("USERS_PORT", usersMicroservicePortDefault)
 	Port                          string = loadEnvValue("PORT", serverPortDefault)
+	JwtTokenSecret                string = loadEnvValue("JWT_SECRET", jwtTokenSecretDefault)
+	JwtTokenLifeLength            string = loadEnvValue("JWT_TOKEN_LIFE_LENGTH", jwtTokenLifeLength) //Hours
 )
 
 func loadEnvValue(envName string, defaultValue string) string {
@@ -50,15 +54,15 @@ func loadEnvValue(envName string, defaultValue string) string {
 
 func GetUsersMicroserviceUrl() string {
 	if len(UsersMicroservicePort) == 0 || UsersMicroservicePort == "80" {
-		if UsersMicroserviceHost == "http://localhost"{
+		if UsersMicroserviceHost == "http://localhost" {
 			return UsersMicroserviceHost
-		}else {
+		} else {
 			return "http://" + UsersMicroserviceHost
 		}
 	} else {
-		if UsersMicroserviceHost == "http://localhost"{
+		if UsersMicroserviceHost == "http://localhost" {
 			return UsersMicroserviceHost + ":" + UsersMicroservicePort
-		}else{
+		} else {
 			return "http://" + UsersMicroserviceHost + ":" + UsersMicroservicePort
 		}
 	}
@@ -66,16 +70,16 @@ func GetUsersMicroserviceUrl() string {
 
 func GetContentMicroserviceUrl() string {
 	if len(ContentMicroservicePort) == 0 || ContentMicroservicePort == "80" {
-	if ContentMicroserviceHost == "http://localhost"{
+		if ContentMicroserviceHost == "http://localhost" {
 			return ContentMicroserviceHost
-		}else{
+		} else {
 			return "http://" + ContentMicroserviceHost
 		}
 		// return ContentMicroserviceHost
 	} else {
-		if ContentMicroserviceHost == "http://localhost"{
+		if ContentMicroserviceHost == "http://localhost" {
 			return ContentMicroserviceHost + ":" + ContentMicroservicePort
-		}else{
+		} else {
 			return "http://" + ContentMicroserviceHost + ":" + ContentMicroservicePort
 		}
 		// return ContentMicroserviceHost + ":" + ContentMicroservicePort

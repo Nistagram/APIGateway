@@ -5,6 +5,8 @@ import (
 
 	httpHandler "github.com/APIGateway/delivery/http"
 	"github.com/APIGateway/delivery/http/middleware"
+	tokens "github.com/APIGateway/security/helpers/token"
+	"github.com/APIGateway/websocket"
 	"github.com/gorilla/mux"
 )
 
@@ -98,4 +100,21 @@ func (r *Router) Initialize() {
 	r.Router.HandleFunc("/api/report-types", reportHandler.GetAllTypes).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/report", reportHandler.GetAll).Methods("GET", "OPTIONS")
 	r.Router.HandleFunc("/api/report/{id:[0-9]+}", reportHandler.Delete).Methods("DELETE", "OPTIONS")
+
+	setupWebsocket(r)
+}
+
+func setupWebsocket(r *Router) {
+	pool := websocket.NewPool()
+	go pool.Start()
+	websocketHandler := httpHandler.NewWebsocketHandler()
+	r.Router.HandleFunc("/api/ws", func(w http.ResponseWriter, r *http.Request) {
+		token := r.URL.Query().Get("token")
+		authInfo, authErr := tokens.ExtractAuthDetailsFromTokenString(token)
+		if authErr != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		websocketHandler.ServeWs(pool, authInfo.UserId, w, r)
+	}).Methods("GET", "OPTIONS")
 }
