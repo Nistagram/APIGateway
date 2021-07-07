@@ -85,3 +85,21 @@ func GetContentMicroserviceUrl() string {
 		// return ContentMicroserviceHost + ":" + ContentMicroservicePort
 	}
 }
+
+func GetAdvertisementMicroserviceUrl() string {
+	if len(AdvertisementMicroservicePort) == 0 || AdvertisementMicroservicePort == "80" {
+		if AdvertisementMicroserviceHost == "http://localhost" {
+			return AdvertisementMicroserviceHost
+		} else {
+			return "http://" + AdvertisementMicroserviceHost
+		}
+		// return ContentMicroserviceHost
+	} else {
+		if AdvertisementMicroserviceHost == "http://localhost" {
+			return AdvertisementMicroserviceHost + ":" + AdvertisementMicroservicePort
+		} else {
+			return "http://" + AdvertisementMicroserviceHost + ":" + AdvertisementMicroservicePort
+		}
+		// return ContentMicroserviceHost + ":" + ContentMicroservicePort
+	}
+}
